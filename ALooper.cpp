@@ -465,11 +465,13 @@ int pollInner (int timeoutMillis) {
     return result;
 }
 
+#include <SDL2/SDL.h>
 int ALooper_pollOnce(int timeoutMillis, int* outFd, int* outEvents, void** outData) {
     LOOPER_GET_SELF
 
     int result = 0;
     for (;;) {
+        SDL_PumpEvents();
         while (self->mResponseIndex < self->mResponses->size()) {
             const Response& response = self->mResponses->at(self->mResponseIndex++);
             int ident = response.request.ident;

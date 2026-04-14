@@ -1,7 +1,15 @@
 #include "AFakeNative_Utils.h"
 
 #include <sys/time.h>
+#ifdef __vita__
 #include <psp2/kernel/clib.h>
+#else
+#include <stdio.h>
+#define sceClibSnprintf snprintf
+#define sceClibVsnprintf vsnprintf
+#define sceClibPrintf printf
+#define sceClibAbort abort
+#endif
 
 uint64_t AFN_timeMillis() {
     struct timeval te{};

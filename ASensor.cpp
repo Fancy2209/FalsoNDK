@@ -212,8 +212,6 @@ ASensorEventQueue* ASensorManager_createEventQueue(ASensorManager* manager,
 
         g_ASensorEventQueue = (ASensorEventQueue *) malloc(sizeof(sensorEventQueue));
         memcpy(g_ASensorEventQueue, &seq, sizeof(sensorEventQueue));
-
-        sensors_init(g_ASensorEventQueue);
     }
 
     auto * q = (sensorEventQueue *) g_ASensorEventQueue;
