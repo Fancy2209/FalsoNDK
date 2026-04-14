@@ -1,3 +1,4 @@
+#ifndef __linux__
 #include <cstdint>
 #include <psp2/kernel/threadmgr.h>
 #include <malloc.h>
@@ -223,3 +224,4 @@ void pseudo_eventfd_status(int fd, bool * is_readable, bool * is_writeable) {
 
     sceKernelUnlockLwMutex(&eventfd_pool_mutex, 1);
 }
+#endif

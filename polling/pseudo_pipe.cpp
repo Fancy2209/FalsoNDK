@@ -1,3 +1,4 @@
+#ifndef __linux__
 #include <psp2/kernel/threadmgr.h>
 #include <cerrno>
 #include "pseudo_pipe.h"
@@ -209,3 +210,4 @@ bool is_pipe(int fd) {
 
     return p != nullptr;
 }
+#endif

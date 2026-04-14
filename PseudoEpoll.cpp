@@ -1,3 +1,4 @@
+#ifndef __linux__
 #include "PseudoEpoll.h"
 #include "AFakeNative_Utils.h"
 #include <pthread.h>
@@ -6,8 +7,7 @@
 #include <map>
 #include <sys/unistd.h>
 #include <cstdio>
-#include <psp2/kernel/threadmgr.h>
-#include <psp2/kernel/clib.h>
+#include <pthread.h>
 
 #include "polling/pseudo_eventfd.h"
 #include "polling/pseudo_pipe.h"
@@ -26,13 +26,13 @@ typedef struct _epoll_fd_internal {
 } _epoll_fd_internal;
 
 static _epoll_fd_internal epoll_fd_pool[EPOLL_FD_MAX];
-static SceKernelLwMutexWork * _epoll_lock = nullptr;
+static pthread_mutex_t * _epoll_lock = nullptr;
 
 
 void _check_init_lock() {
     if (_epoll_lock == nullptr) {
-        _epoll_lock = (SceKernelLwMutexWork *) malloc(sizeof(SceKernelLwMutexWork));
-        sceKernelCreateLwMutex(_epoll_lock, "epoll_lock", 0, 0, NULL);
+        _epoll_lock = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t));
+        pthread_mutex_init(_epoll_lock, NULL);
 
         for (int i = 0; i < EPOLL_FD_MAX; ++i) {
             epoll_fd_pool[i].fd = -1;
@@ -42,11 +42,11 @@ void _check_init_lock() {
 
 void _lock() {
     _check_init_lock();
-    sceKernelLockLwMutex(_epoll_lock, 1, NULL);
+    pthread_mutex_lock(_epoll_lock);
 }
 
 void _unlock() {
-    if (_epoll_lock) sceKernelUnlockLwMutex(_epoll_lock, 1);
+    if (_epoll_lock) pthread_mutex_unlock(_epoll_lock);
 }
 
 int pseudo_epoll_create(int size) {
@@ -334,3 +334,4 @@ ssize_t pseudo_write(int fd, const void *buf, size_t count) {
         return write(fd, buf, count);
     }
 }
+#endif

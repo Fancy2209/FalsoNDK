@@ -12,12 +12,17 @@
 extern "C" {
 #endif
 
+#ifndef __linux__
 int pseudo_eventfd(unsigned int initval, int flags);
 
 bool is_eventfd(int fd);
 ssize_t pseudo_eventfd_read(int fd, void *buf, size_t count);
 ssize_t pseudo_eventfd_write(int fd, const void *buf, size_t count);
 void pseudo_eventfd_status(int fd, bool *is_readable, bool *is_writeable);
+#else
+#include <unistd.h>
+#define pseudo_eventfd eventfd
+#endif
 
 #ifdef __cplusplus
 };
