@@ -92,6 +92,7 @@ int pseudo_epoll_ctl(int epfd, int op, int fd, struct pseudo_epoll_event *event)
 ssize_t pseudo_read(int fd, void *buf, size_t count);
 ssize_t pseudo_write(int fd, const void *buf, size_t count);
 #else
+#define pseudo_epoll_data_t epoll_data_t
 #define pseudo_epoll_event epoll_event
 #define pseudo_epoll_wait epoll_wait
 #define pseudo_epoll_create epoll_create
